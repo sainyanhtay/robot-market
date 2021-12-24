@@ -6,26 +6,28 @@ where on the right side of the screen should display a cart that show a list of 
 **Please read the instructions and FAQ below before begin.**
 
 ## Contact Details
+
 Please fill in your name and email
-- Name: ____
-- Email: ____
+
+- Name: Sai Nyan Htay
+- Email: sainyanhtay@gmail.com
 
 ## Features
 
 - products should display in a grid.
 - each robot should show image, name, price, stock, created date, material, and button to add to cart
-    - created date should display in `DD-MM-YYYY` format
-    - when robot is out of stock add to cart button should be disabled
-    - price should be displayed in Thai Baht formatted, `฿5,300.00`
+  - created date should display in `DD-MM-YYYY` format
+  - when robot is out of stock add to cart button should be disabled
+  - price should be displayed in Thai Baht formatted, `฿5,300.00`
 - give the user option to filter by a robot's material type.
 - user can add up to 5 different robots to cart, but they can select as much as they want in the same type until it runs
   out of stock.
-    - if user try to add more that 5 different robots then it should show an alert
+  - if user try to add more that 5 different robots then it should show an alert
 - cart should display on the right side of the screen.
-    - cart should contain list of selected robots, total amount and total price
-    - user can increase or decrease the number of robots inside of cart section
-    - total amount should be the total number of selected robots
-    - total price should be in Thai Baht formatted, `฿5,300.00`
+  - cart should contain list of selected robots, total amount and total price
+  - user can increase or decrease the number of robots inside of cart section
+  - total amount should be the total number of selected robots
+  - total price should be in Thai Baht formatted, `฿5,300.00`
 
 ## Robots API
 
@@ -33,6 +35,7 @@ Please fill in your name and email
 
 - The basic query looks like this: `/api/robots`
 - The response format is JSON
+
 ```
 {
   name
@@ -62,8 +65,9 @@ libraries/frameworks, packages, tools that you want.
 ### What should I do when I'm finished?
 
 After you have finished you work push all commits to your repository, and then send us email to inform that app has been finished, also please add following users there:
-* win@morphos.is
-* suhas@morphos.is
+
+- win@morphos.is
+- suhas@morphos.is
 
 ### How is the exam graded?
 
