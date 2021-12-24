@@ -7,11 +7,12 @@ class Login extends Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
     };
   }
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value, error: "" });
+  handleChange = (e) =>
+    this.setState({ [e.target.name]: e.target.value, error: "" });
 
   login = (e) => {
     e.preventDefault();
@@ -20,12 +21,11 @@ class Login extends Component {
     if (!username || !password) {
       return this.setState({ error: "Fill all fields!" });
     }
-    this.props.context.login(username, password)
-      .then((loggedIn) => {
-        if (!loggedIn) {
-          this.setState({ error: "Invalid Credentails" });
-        }
-      })
+    this.props.context.login(username, password).then((loggedIn) => {
+      if (!loggedIn) {
+        this.setState({ error: "Invalid Credentails" });
+      }
+    });
   };
 
   render() {
@@ -63,9 +63,7 @@ class Login extends Component {
                 <div className="has-text-danger">{this.state.error}</div>
               )}
               <div className="field is-clearfix">
-                <button
-                  className="button is-primary is-outlined is-pulled-right"
-                >
+                <button className="button is-primary is-outlined is-pulled-right">
                   Submit
                 </button>
               </div>

@@ -1,9 +1,9 @@
 import React from "react";
 import moment from "moment";
 
-function currencyFormat(num) {
+const currencyFormat = (num) => {
   return "฿" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "1,");
-}
+};
 
 const ProductItem = (props) => {
   const { product } = props;
