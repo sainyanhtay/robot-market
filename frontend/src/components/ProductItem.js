@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 
 const currencyFormat = (num) => {
-  return "฿" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "1,");
+  return "฿ " + Intl.NumberFormat("en-US").format(num);
 };
 
 const addCart = (props) => {
