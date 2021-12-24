@@ -2,9 +2,21 @@ import React from "react";
 import withContext from "../withContext";
 import CartItem from "./CartItem";
 
-const Cart = props => {
+const currencyFormat = (num) => {
+  return "฿" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "1,");
+};
+
+const Cart = (props) => {
   const { cart } = props.context;
   const cartKeys = Object.keys(cart || {});
+  let totalAmount = 0;
+  let totalPrice = 0;
+
+  for (const property in cart) {
+    totalAmount += cart[property].amount;
+    totalPrice += Number(cart[property].product.price) * cart[property].amount;
+  }
+
   return (
     <>
       <div className="hero is-primary">
@@ -14,14 +26,21 @@ const Cart = props => {
       </div>
       <br />
       <div className="container">
+        <b className="is-pulled-left" style={{ textTransform: "capitalize" }}>
+          Total in Cart: {totalAmount}
+        </b>
+        <b className="is-pulled-right" style={{ textTransform: "capitalize" }}>
+          Total Price: {currencyFormat(totalPrice)}
+        </b>
         {cartKeys.length ? (
           <div className="column columns is-multiline">
-            {cartKeys.map(key => (
+            {cartKeys.map((key) => (
               <CartItem
                 cartKey={key}
                 key={key}
                 cartItem={cart[key]}
                 removeFromCart={props.context.removeFromCart}
+                addToCart={props.context.addToCart}
               />
             ))}
             <div className="column is-12 is-clearfix">

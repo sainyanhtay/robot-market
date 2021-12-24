@@ -17,26 +17,29 @@ export default class App extends Component {
       user: null,
       cart: {},
       products: [],
+      storedProducts: [],
     };
     this.routerRef = React.createRef();
   }
 
   async componentDidMount() {
     let user = localStorage.getItem("user");
-    let cart = localStorage.getItem("cart");
 
     const products = await axios.get("http://localhost:8000/api/robots");
     user = user ? JSON.parse(user) : null;
-    cart = cart ? JSON.parse(cart) : {};
 
     console.log("check", products);
 
-    this.setState({ user, products: products.data.data, cart });
+    this.setState({
+      user,
+      products: products.data.data,
+      storedProducts: JSON.parse(JSON.stringify(products.data.data)),
+    });
   }
 
   login = async (email, password) => {
     const res = await axios
-      .post("http://localhost:3001/login", { email, password })
+      .post("http://localhost:8000/api/login", { email, password })
       .catch((res) => {
         return { status: 401, message: "Unauthorized" };
       });
@@ -66,18 +69,13 @@ export default class App extends Component {
 
   addToCart = (cartItem) => {
     let { cart, products } = this.state;
-    let totalQuantity = 0;
 
     if (cart[cartItem.id]) {
       cart[cartItem.id].amount += cartItem.amount;
     } else {
       cart[cartItem.id] = cartItem;
     }
-    if (cart[cartItem.id].amount > cart[cartItem.id].product.stock) {
-      cart[cartItem.id].amount = cart[cartItem.id].product.stock;
-    }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
     this.setState({ cart });
 
     // reduce the amount of stock
@@ -90,16 +88,20 @@ export default class App extends Component {
   };
 
   removeFromCart = (cartItemId) => {
-    let cart = this.state.cart;
+    let { cart, products } = this.state;
+
+    // reincrease the amount of stock
+    products.find((item) => item == cart[cartItemId].product).stock +=
+      cart[cartItemId].amount;
+
     delete cart[cartItemId];
-    localStorage.setItem("cart", JSON.stringify(cart));
+
     this.setState({ cart });
   };
 
   clearCart = () => {
     let cart = {};
-    localStorage.removeItem("cart");
-    this.setState({ cart });
+    this.setState({ cart, products: this.state.storedProducts });
   };
 
   checkout = () => {
@@ -114,7 +116,7 @@ export default class App extends Component {
       if (cart[p.name]) {
         p.stock = p.stock - cart[p.name].amount;
 
-        axios.put(`http://localhost:3001/products/${p.id}`, { ...p });
+        axios.put(`http://localhost:8000/api/products/${p.id}`, { ...p });
       }
       return p;
     });
@@ -131,7 +133,6 @@ export default class App extends Component {
           removeFromCart: this.removeFromCart,
           addToCart: this.addToCart,
           login: this.login,
-          addProduct: this.addProduct,
           clearCart: this.clearCart,
           checkout: this.checkout,
         }}
