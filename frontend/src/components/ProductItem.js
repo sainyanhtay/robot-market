@@ -5,6 +5,16 @@ const currencyFormat = (num) => {
   return "฿" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "1,");
 };
 
+const addCart = (props) => {
+  const { product } = props;
+
+  props.addToCart({
+    id: product.name,
+    product,
+    amount: 1,
+  });
+};
+
 const ProductItem = (props) => {
   const { product } = props;
   return (
@@ -35,13 +45,7 @@ const ProductItem = (props) => {
               </small>
               <button
                 className="button is-small is-outlined is-primary   is-pulled-right"
-                onClick={() =>
-                  props.addToCart({
-                    id: product.name,
-                    product,
-                    amount: 1,
-                  })
-                }
+                onClick={() => addCart(props)}
                 disabled={product.stock <= 0}
               >
                 Add to Cart

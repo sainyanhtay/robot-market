@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, BrowserRouter as Router } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import AddProduct from "./components/AddProduct";
 import Cart from "./components/Cart";
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
@@ -63,14 +64,10 @@ export default class App extends Component {
     localStorage.removeItem("user");
   };
 
-  addProduct = (product, callback) => {
-    let products = this.state.products.slice();
-    products.push(product);
-    this.setState({ products }, () => callback && callback());
-  };
-
   addToCart = (cartItem) => {
-    let cart = this.state.cart;
+    let { cart, products } = this.state;
+    let totalQuantity = 0;
+
     if (cart[cartItem.id]) {
       cart[cartItem.id].amount += cartItem.amount;
     } else {
@@ -79,8 +76,17 @@ export default class App extends Component {
     if (cart[cartItem.id].amount > cart[cartItem.id].product.stock) {
       cart[cartItem.id].amount = cart[cartItem.id].product.stock;
     }
+
     localStorage.setItem("cart", JSON.stringify(cart));
     this.setState({ cart });
+
+    // reduce the amount of stock
+    products.find((item) => item == cartItem.product).stock -= cartItem.amount;
+
+    if (Object.keys(cart).length > 5)
+      toast.warn(
+        "You already have selected more than 5 different robots in the cart."
+      );
   };
 
   removeFromCart = (cartItemId) => {
@@ -131,6 +137,7 @@ export default class App extends Component {
         }}
       >
         <Router ref={this.routerRef}>
+          <ToastContainer />
           <div className="App">
             <nav
               className="navbar container"
@@ -192,7 +199,6 @@ export default class App extends Component {
               <Route exact path="/" component={ProductList} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/cart" component={Cart} />
-              <Route exact path="/add-product" component={AddProduct} />
               <Route exact path="/products" component={ProductList} />
             </Switch>
           </div>
